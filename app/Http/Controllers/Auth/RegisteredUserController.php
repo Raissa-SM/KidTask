@@ -29,12 +29,15 @@ class RegisteredUserController extends Controller
 
     /**
      * Processa o cadastro do novo usuário.
-     * - Se role = parent: cria uma nova família.
-     * - Se role = child:  entra na família pelo código de convite.
+     *
+     * Fluxos possíveis:
+     *   - role=parent + parent_action=create  → cria nova família com family_name
+     *   - role=parent + parent_action=join    → entra em família existente pelo invite_code
+     *   - role=child                          → entra em família existente pelo invite_code
      */
     public function store(Request $request): RedirectResponse
     {
-        // Validação base (campos comuns a ambos os perfis)
+        // Validação base — campos comuns a todos os perfis
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -42,18 +45,29 @@ class RegisteredUserController extends Controller
             'role'     => ['required', Rule::in(['parent', 'child'])],
         ]);
 
-        // Validações adicionais por perfil
+        // Validações condicionais por perfil e intenção
         if ($request->role === 'parent') {
             $request->validate([
-                'family_name' => ['required', 'string', 'max:255'],
+                'parent_action' => ['required', Rule::in(['create', 'join'])],
             ]);
+
+            if ($request->parent_action === 'create') {
+                $request->validate([
+                    'family_name' => ['required', 'string', 'max:255'],
+                ]);
+            } else {
+                $request->validate([
+                    'invite_code' => ['required', 'string'],
+                ]);
+            }
         } else {
+            // Filho sempre precisa de código de convite
             $request->validate([
                 'invite_code' => ['required', 'string'],
             ]);
         }
 
-        // Cria o usuário sem família ainda (será associado logo abaixo)
+        // Cria o usuário — família será associada logo abaixo
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
@@ -62,15 +76,15 @@ class RegisteredUserController extends Controller
         ]);
 
         try {
-            if ($request->role === 'parent') {
+            if ($request->role === 'parent' && $request->parent_action === 'create') {
                 // Pai cria uma nova família
                 $this->familyService->createForUser($user, $request->family_name);
             } else {
-                // Filho entra na família pelo código de convite
+                // Pai entrando em família existente OU filho — ambos usam o código de convite
                 $this->familyService->joinByCode($user, $request->invite_code);
             }
         } catch (\InvalidArgumentException $e) {
-            // Código de convite inválido — desfaz o usuário criado e volta com erro
+            // Código inválido — remove o usuário recém-criado e volta com o erro
             $user->delete();
 
             return back()
@@ -82,7 +96,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // Redireciona para o dashboard correto conforme o perfil
         return $user->isParent()
             ? redirect()->route('parent.dashboard')
             : redirect()->route('child.dashboard');
