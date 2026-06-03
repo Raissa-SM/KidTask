@@ -32,17 +32,17 @@ class TaskPolicy
     }
 
     /**
-     * Apenas o pai que criou a tarefa pode editá-la.
+     * Qualquer pai da família pode editar tarefas da família.
+     * (Não restringimos ao criador pois a família pode ter múltiplos responsáveis.)
      */
     public function update(User $user, Task $task): bool
     {
         return $user->isParent()
-            && $user->family_id === $task->family_id
-            && $user->id === $task->created_by;
+            && $user->family_id === $task->family_id;
     }
 
     /**
-     * Mesma regra do update — só o criador pode excluir.
+     * Mesma regra do update — qualquer pai da família pode excluir.
      */
     public function delete(User $user, Task $task): bool
     {
