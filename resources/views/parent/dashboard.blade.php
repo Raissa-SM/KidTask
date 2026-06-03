@@ -10,8 +10,13 @@
 
     <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <span class="text-xl font-bold text-indigo-600">KidTask</span>
+        <nav class="flex items-center gap-6 text-sm">
+            <a href="{{ route('parent.dashboard') }}" class="text-indigo-600 font-medium">Painel</a>
+            <a href="{{ route('parent.tasks.index') }}" class="text-gray-500 hover:text-indigo-600">Tarefas</a>
+            {{-- Fase 6: Recompensas e Validações serão adicionadas aqui --}}
+        </nav>
         <div class="flex items-center gap-4">
-            <span class="text-sm text-gray-600">Olá, {{ auth()->user()->name }}</span>
+            <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="text-sm text-gray-400 hover:text-gray-600">Sair</button>
@@ -28,8 +33,11 @@
         </p>
 
         <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-6 text-indigo-700">
-            <p class="font-semibold">✅ Fase 3 concluída com sucesso!</p>
-            <p class="text-sm mt-1">As funcionalidades de tarefas, validação e recompensas serão adicionadas nas próximas fases.</p>
+            <p class="font-semibold">✅ Fase 4 em andamento!</p>
+            <p class="text-sm mt-1">
+                Gerencie as tarefas da família pelo menu acima.
+                As funcionalidades de validação e recompensas serão adicionadas nas próximas fases.
+            </p>
         </div>
     </main>
 

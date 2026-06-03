@@ -149,15 +149,21 @@
                         <div class="flex items-center gap-3 mt-1 text-xs text-gray-400 flex-wrap">
                             <span>⭐ {{ $task->points }} pts</span>
 
-                            @if($task->due_date)
+                            @if($task->recurrence === 'none' && $task->due_date)
                                 <span>📅 {{ $task->due_date->format('d/m/Y') }}</span>
+                            @elseif($task->recurrence === 'weekly' && $task->recurrence_day !== null)
+                                @php
+                                    $weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+                                @endphp
+                                <span>📅 {{ $weekDays[$task->recurrence_day] }}</span>
+                            @elseif($task->recurrence === 'monthly' && $task->recurrence_day !== null)
+                                <span>📅 dia {{ $task->recurrence_day }}</span>
                             @endif
 
                             @if($task->reminder_time)
                                 <span>🔔 {{ substr($task->reminder_time, 0, 5) }}</span>
                             @endif
 
-                            {{-- Filhos atribuídos --}}
                             @if($task->assignedUsers->isNotEmpty())
                                 <span>👤 {{ $task->assignedUsers->pluck('name')->implode(', ') }}</span>
                             @endif

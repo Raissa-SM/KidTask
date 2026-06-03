@@ -38,7 +38,7 @@
     @endif
 
     <div class="bg-white border border-gray-200 rounded-2xl p-6">
-        <form id="form-task" method="POST" action="{{ route('parent.tasks.update', $task) }}">
+        <form method="POST" action="{{ route('parent.tasks.update', $task) }}">
             @csrf
             @method('PUT')
 
@@ -116,13 +116,13 @@
                 @php $currentDay = old('recurrence_day', $task->recurrence_day); @endphp
                 <select id="recurrence_day_weekly" name="recurrence_day"
                         class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="0" {{ $currentDay !== null && $currentDay == 0 ? 'selected' : '' }}>Domingo</option>
-                    <option value="1" {{ $currentDay !== null && $currentDay == 1 ? 'selected' : '' }}>Segunda-feira</option>
-                    <option value="2" {{ $currentDay !== null && $currentDay == 2 ? 'selected' : '' }}>Terça-feira</option>
-                    <option value="3" {{ $currentDay !== null && $currentDay == 3 ? 'selected' : '' }}>Quarta-feira</option>
-                    <option value="4" {{ $currentDay !== null && $currentDay == 4 ? 'selected' : '' }}>Quinta-feira</option>
-                    <option value="5" {{ $currentDay !== null && $currentDay == 5 ? 'selected' : '' }}>Sexta-feira</option>
-                    <option value="6" {{ $currentDay !== null && $currentDay == 6 ? 'selected' : '' }}>Sábado</option>
+                    <option value="0" {{ $currentDay == 0 ? 'selected' : '' }}>Domingo</option>
+                    <option value="1" {{ $currentDay == 1 ? 'selected' : '' }}>Segunda-feira</option>
+                    <option value="2" {{ $currentDay == 2 ? 'selected' : '' }}>Terça-feira</option>
+                    <option value="3" {{ $currentDay == 3 ? 'selected' : '' }}>Quarta-feira</option>
+                    <option value="4" {{ $currentDay == 4 ? 'selected' : '' }}>Quinta-feira</option>
+                    <option value="5" {{ $currentDay == 5 ? 'selected' : '' }}>Sexta-feira</option>
+                    <option value="6" {{ $currentDay == 6 ? 'selected' : '' }}>Sábado</option>
                 </select>
             </div>
 
@@ -134,8 +134,11 @@
                 <input type="number" id="recurrence_day_monthly" name="recurrence_day"
                        value="{{ $currentRecurrence === 'monthly' ? $currentDay : '' }}"
                        min="1" max="28"
-                       class="w-32 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                       class="w-32 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('recurrence_day') border-red-400 @enderror">
                 <span class="text-xs text-gray-400 ml-2">entre 1 e 28</span>
+                @error('recurrence_day')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             {{-- Lembrete --}}
@@ -219,7 +222,7 @@
      * Cobre due_date, recurrence_day_weekly e recurrence_day_monthly —
      * somente o campo do tipo ativo é enviado ao servidor.
      */
-    document.getElementById('form-task').addEventListener('submit', function () {
+    document.querySelector('form').addEventListener('submit', function () {
         const recurrence = document.getElementById('recurrence').value;
 
         document.getElementById('due_date').disabled              = (recurrence !== 'none');
