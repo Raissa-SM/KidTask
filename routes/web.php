@@ -3,8 +3,11 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Child\DashboardController as ChildDashboardController;
+use App\Http\Controllers\Child\PointController;
+use App\Http\Controllers\Child\TaskCompletionController;
 use App\Http\Controllers\Parent\DashboardController as ParentDashboardController;
 use App\Http\Controllers\Parent\TaskController;
+use App\Http\Controllers\Parent\ValidationController;
 use Illuminate\Support\Facades\Route;
 
 // ── Página inicial ────────────────────────────────────────────────────────────
@@ -45,9 +48,18 @@ Route::middleware(['auth', 'parent', 'family'])
 
         // CRUD de tarefas — Fase 4
         Route::resource('tasks', TaskController::class)
-            ->except(['show']); // show não é necessário: edição já exibe os detalhes
+            ->except(['show']);
 
-        // Fase 5: ValidationController será adicionado aqui
+        // Validações — Fase 5
+        Route::get('/validations', [ValidationController::class, 'index'])
+            ->name('validations.index');
+
+        Route::post('/validations/{completion}/approve', [ValidationController::class, 'approve'])
+            ->name('validations.approve');
+
+        Route::post('/validations/{completion}/reject', [ValidationController::class, 'reject'])
+            ->name('validations.reject');
+
         // Fase 6: RewardController será adicionado aqui
     });
 
@@ -59,5 +71,11 @@ Route::middleware(['auth', 'family'])
         Route::get('/dashboard', [ChildDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Fase 5: TaskCompletionController e PointController serão adicionados aqui
+        // Marcar tarefa como concluída — Fase 5
+        Route::post('/tasks/{task}/complete', [TaskCompletionController::class, 'store'])
+            ->name('tasks.complete');
+
+        // Histórico de pontos — Fase 5
+        Route::get('/points', [PointController::class, 'index'])
+            ->name('points');
     });
