@@ -61,7 +61,8 @@
         <div class="space-y-3">
             @foreach($tasks as $task)
                 @php
-                    // A tarefa já carregou as conclusões de hoje via eager load
+                    // A tarefa carregou as conclusões de hoje ordenadas por created_at DESC
+                    // então first() retorna sempre a conclusão mais recente
                     $todayCompletion = $task->completions->first();
                     $isDone     = $todayCompletion !== null;
                     $isPending  = $todayCompletion?->isPending() ?? false;
@@ -127,7 +128,7 @@
                             <form method="POST" action="{{ route('child.tasks.complete', $task) }}">
                                 @csrf
                                 <button type="submit"
-                                        class="bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
+                                        class="bg-red-500 hover:bg-red-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
                                     Tentar de novo
                                 </button>
                             </form>

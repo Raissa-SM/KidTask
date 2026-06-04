@@ -144,7 +144,9 @@
                         <p class="text-xs text-gray-400 mt-0.5">
                             {{ $completion->user->name }}
                             &nbsp;·&nbsp;
-                            {{ $completion->validated_at->format('d/m/Y H:i') }}
+                            Concluída: {{ $completion->completed_at->format('d/m/Y H:i') }}
+                            &nbsp;·&nbsp;
+                            Validada: {{ $completion->validated_at->format('d/m/Y H:i') }}
                             @if($completion->notes)
                                 &nbsp;·&nbsp; "{{ $completion->notes }}"
                             @endif

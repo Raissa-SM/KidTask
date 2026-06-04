@@ -87,7 +87,8 @@ class TaskService
             ->forDate($today)
             ->whereHas('assignedUsers', fn ($q) => $q->where('users.id', $child->id))
             ->with(['completions' => fn ($q) => $q->where('user_id', $child->id)
-                                                   ->whereDate('completed_at', $today)])
+                                                   ->whereDate('completed_at', $today)
+                                                   ->orderBy('created_at', 'desc')])
             ->get();
     }
 

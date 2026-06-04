@@ -8,20 +8,27 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-<header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-    <span class="text-xl font-bold text-indigo-600">KidTask</span>
-    <nav class="flex items-center gap-6 text-sm">
-        <a href="{{ route('parent.dashboard') }}" class="text-gray-500 hover:text-indigo-600">Painel</a>
-        <a href="{{ route('parent.tasks.index') }}" class="text-indigo-600 font-medium">Tarefas</a>
-    </nav>
-    <div class="flex items-center gap-4">
-        <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="text-sm text-gray-400 hover:text-gray-600">Sair</button>
-        </form>
-    </div>
-</header>
+    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <span class="text-xl font-bold text-indigo-600">KidTask</span>
+        <nav class="flex items-center gap-6 text-sm">
+            <a href="{{ route('parent.dashboard') }}" class="text-gray-500 hover:text-indigo-600">Painel</a>
+            <a href="{{ route('parent.tasks.index') }}" class="text-gray-500 hover:text-indigo-600">Tarefas</a>
+            <a href="{{ route('parent.validations.index') }}" class="text-gray-500 hover:text-indigo-600">
+                Validações
+                @php $pendingNavCount = \App\Models\TaskCompletion::where('status', 'pending_validation')->whereHas('task', fn($q) => $q->where('family_id', auth()->user()->family_id))->count(); @endphp
+                @if($pendingNavCount > 0)
+                    <span class="ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{{ $pendingNavCount }}</span>
+                @endif
+            </a>
+        </nav>
+        <div class="flex items-center gap-4">
+            <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="text-sm text-gray-400 hover:text-gray-600">Sair</button>
+            </form>
+        </div>
+    </header>
 
 <main class="max-w-2xl mx-auto px-6 py-8">
 
@@ -38,7 +45,7 @@
     @endif
 
     <div class="bg-white border border-gray-200 rounded-2xl p-6">
-        <form id="form-task" method="POST" action="{{ route('parent.tasks.update', $task) }}">
+        <form method="POST" action="{{ route('parent.tasks.update', $task) }}">
             @csrf
             @method('PUT')
 
@@ -116,13 +123,13 @@
                 @php $currentDay = old('recurrence_day', $task->recurrence_day); @endphp
                 <select id="recurrence_day_weekly" name="recurrence_day"
                         class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="0" {{ $currentDay !== null && $currentDay == 0 ? 'selected' : '' }}>Domingo</option>
-                    <option value="1" {{ $currentDay !== null && $currentDay == 1 ? 'selected' : '' }}>Segunda-feira</option>
-                    <option value="2" {{ $currentDay !== null && $currentDay == 2 ? 'selected' : '' }}>Terça-feira</option>
-                    <option value="3" {{ $currentDay !== null && $currentDay == 3 ? 'selected' : '' }}>Quarta-feira</option>
-                    <option value="4" {{ $currentDay !== null && $currentDay == 4 ? 'selected' : '' }}>Quinta-feira</option>
-                    <option value="5" {{ $currentDay !== null && $currentDay == 5 ? 'selected' : '' }}>Sexta-feira</option>
-                    <option value="6" {{ $currentDay !== null && $currentDay == 6 ? 'selected' : '' }}>Sábado</option>
+                    <option value="0" {{ $currentDay == 0 ? 'selected' : '' }}>Domingo</option>
+                    <option value="1" {{ $currentDay == 1 ? 'selected' : '' }}>Segunda-feira</option>
+                    <option value="2" {{ $currentDay == 2 ? 'selected' : '' }}>Terça-feira</option>
+                    <option value="3" {{ $currentDay == 3 ? 'selected' : '' }}>Quarta-feira</option>
+                    <option value="4" {{ $currentDay == 4 ? 'selected' : '' }}>Quinta-feira</option>
+                    <option value="5" {{ $currentDay == 5 ? 'selected' : '' }}>Sexta-feira</option>
+                    <option value="6" {{ $currentDay == 6 ? 'selected' : '' }}>Sábado</option>
                 </select>
             </div>
 
@@ -222,7 +229,7 @@
      * Cobre due_date, recurrence_day_weekly e recurrence_day_monthly —
      * somente o campo do tipo ativo é enviado ao servidor.
      */
-    document.getElementById('form-task').addEventListener('submit', function () {
+    document.querySelector('form').addEventListener('submit', function () {
         const recurrence = document.getElementById('recurrence').value;
 
         document.getElementById('due_date').disabled              = (recurrence !== 'none');
