@@ -1,38 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Tarefa — KidTask</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 min-h-screen">
+@extends('layouts.app')
+@section('title', 'Editar Tarefa')
 
-    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <span class="text-xl font-bold text-indigo-600">KidTask</span>
-        <nav class="flex items-center gap-6 text-sm">
-            <a href="{{ route('parent.dashboard') }}" class="text-gray-500 hover:text-indigo-600">Painel</a>
-            <a href="{{ route('parent.tasks.index') }}" class="text-gray-500 hover:text-indigo-600">Tarefas</a>
-            <a href="{{ route('parent.validations.index') }}" class="text-gray-500 hover:text-indigo-600">
-                Validações
-                @php $pendingNavCount = \App\Models\TaskCompletion::where('status', 'pending_validation')->whereHas('task', fn($q) => $q->where('family_id', auth()->user()->family_id))->count(); @endphp
-                @if($pendingNavCount > 0)
-                    <span class="ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{{ $pendingNavCount }}</span>
-                @endif
-            </a>
-        </nav>
-        <div class="flex items-center gap-4">
-            <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="text-sm text-gray-400 hover:text-gray-600">Sair</button>
-            </form>
-        </div>
-    </header>
+@section('content')
 
-<main class="max-w-2xl mx-auto px-6 py-8">
-
-    <div class="flex items-center gap-3 mb-6">
+<div class="flex items-center gap-3 mb-6">
         <a href="{{ route('parent.tasks.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">← Voltar</a>
         <h1 class="text-2xl font-bold text-gray-800">Editar Tarefa</h1>
     </div>
@@ -211,10 +182,11 @@
 
         </form>
     </div>
-</main>
 
-<script>
-    function toggleRecurrenceFields(value) {
+@endsection
+
+@push('scripts')
+<script>function toggleRecurrenceFields(value) {
         document.getElementById('field-due-date').classList.toggle('hidden', value !== 'none');
         document.getElementById('field-recurrence-day-weekly').classList.toggle('hidden', value !== 'weekly');
         document.getElementById('field-recurrence-day-monthly').classList.toggle('hidden', value !== 'monthly');
@@ -235,8 +207,5 @@
         document.getElementById('due_date').disabled              = (recurrence !== 'none');
         document.getElementById('recurrence_day_weekly').disabled  = (recurrence !== 'weekly');
         document.getElementById('recurrence_day_monthly').disabled = (recurrence !== 'monthly');
-    });
-</script>
-
-</body>
-</html>
+    });</script>
+@endpush

@@ -1,31 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Dia — KidTask</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 min-h-screen">
+@extends('layouts.app')
+@section('title', 'Meu Dia')
 
-<header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-    <span class="text-xl font-bold text-indigo-600">KidTask</span>
-    <nav class="flex items-center gap-6 text-sm">
-        <a href="{{ route('child.dashboard') }}" class="text-indigo-600 font-medium">Meu Dia</a>
-        <a href="{{ route('child.points') }}" class="text-gray-500 hover:text-indigo-600">Meus Pontos</a>
-    </nav>
-    <div class="flex items-center gap-4">
-        <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="text-sm text-gray-400 hover:text-gray-600">Sair</button>
-        </form>
-    </div>
-</header>
+@section('content')
 
-<main class="max-w-2xl mx-auto px-6 py-8">
-
-    {{-- Saudação + saldo --}}
+{{-- Saudação + saldo --}}
     <div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">Olá, {{ auth()->user()->name }}! 👋</h1>
@@ -61,8 +39,7 @@
         <div class="space-y-3">
             @foreach($tasks as $task)
                 @php
-                    // A tarefa carregou as conclusões de hoje ordenadas por created_at DESC
-                    // então first() retorna sempre a conclusão mais recente
+                    // A tarefa já carregou as conclusões de hoje via eager load
                     $todayCompletion = $task->completions->first();
                     $isDone     = $todayCompletion !== null;
                     $isPending  = $todayCompletion?->isPending() ?? false;
@@ -128,7 +105,7 @@
                             <form method="POST" action="{{ route('child.tasks.complete', $task) }}">
                                 @csrf
                                 <button type="submit"
-                                        class="bg-red-500 hover:bg-red-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
+                                        class="bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
                                     Tentar de novo
                                 </button>
                             </form>
@@ -152,7 +129,4 @@
         </div>
     @endif
 
-</main>
-
-</body>
-</html>
+@endsection

@@ -1,21 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar — KidTask</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+@extends('layouts.guest')
+@section('title', 'Entrar')
+@section('subtitle', 'Entre na sua conta')
 
-<div class="w-full max-w-sm px-6 py-8">
+@section('content')
 
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-indigo-600">KidTask</h1>
-        <p class="text-gray-500 mt-1">Entre na sua conta</p>
-    </div>
-
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
 
         {{-- Erro de sessão (ex: credenciais inválidas) --}}
         @if (session('status'))
@@ -96,4 +85,5 @@
 </div>
 
 </body>
-</html>
+
+@endsection

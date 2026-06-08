@@ -1,23 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro — KidTask</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+@extends('layouts.guest')
+@section('title', 'Cadastro')
+@section('subtitle', 'Crie sua conta e comece a organizar a família')
 
-<div class="w-full max-w-md px-6 py-8">
+@section('content')
 
-    <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-indigo-600">KidTask</h1>
-        <p class="text-gray-500 mt-1">Crie sua conta e comece a organizar a família</p>
-    </div>
-
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-
-        <form method="POST" action="{{ route('register') }}">
+<form method="POST" action="{{ route('register') }}">
             @csrf
 
             {{-- Nome --}}
@@ -254,18 +241,10 @@
 
         </form>
 
-        <p class="text-center text-sm text-gray-500 mt-6">
-            Já tem conta?
-            <a href="{{ route('login') }}" class="text-indigo-600 hover:underline font-medium">
-                Entrar
-            </a>
-        </p>
+@endsection
 
-    </div>
-</div>
-
-<script>
-    /**
+@push('scripts')
+<script>/**
      * Alterna os blocos de campos conforme o perfil selecionado (pai ou filho).
      * Sincroniza o campo invite_code entre os dois inputs para manter old() funcionando.
      */
@@ -319,8 +298,5 @@
             // Desabilita o campo de código do filho (bloco oculto)
             document.getElementById('invite_code_child').disabled = true;
         }
-    });
-</script>
-
-</body>
-</html>
+    });</script>
+@endpush

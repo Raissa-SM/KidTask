@@ -1,40 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel — KidTask</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-50 min-h-screen">
+@extends('layouts.app')
+@section('title', 'Painel')
 
-<header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-    <span class="text-xl font-bold text-indigo-600">KidTask</span>
-    <nav class="flex items-center gap-6 text-sm">
-        <a href="{{ route('parent.dashboard') }}" class="text-indigo-600 font-medium">Painel</a>
-        <a href="{{ route('parent.tasks.index') }}" class="text-gray-500 hover:text-indigo-600">Tarefas</a>
-        <a href="{{ route('parent.validations.index') }}" class="text-gray-500 hover:text-indigo-600">
-            Validações
-            @if($pending->isNotEmpty())
-                <span class="ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">
-                    {{ $pending->count() }}
-                </span>
-            @endif
-        </a>
-        {{-- Fase 6: Recompensas --}}
-    </nav>
-    <div class="flex items-center gap-4">
-        <span class="text-sm text-gray-600">{{ auth()->user()->name }}</span>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="text-sm text-gray-400 hover:text-gray-600">Sair</button>
-        </form>
-    </div>
-</header>
+@section('content')
 
-<main class="max-w-4xl mx-auto px-6 py-8">
-
-    <div class="flex items-center justify-between mb-6">
+<div class="flex items-center justify-between mb-6">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">Painel do Responsável</h1>
             <p class="text-gray-500 text-sm mt-1">
@@ -123,7 +92,4 @@
         </div>
     @endif
 
-</main>
-
-</body>
-</html>
+@endsection
