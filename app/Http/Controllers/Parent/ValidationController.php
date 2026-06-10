@@ -75,7 +75,7 @@ class ValidationController extends Controller
 
         return redirect()
             ->route('parent.validations.index')
-            ->with('success', "Conclusão de \"{$completion->task->title}\" rejeitada.");
+            ->with('info', "Conclusão de \"{$completion->task->title}\" rejeitada.");
     }
 
     /**

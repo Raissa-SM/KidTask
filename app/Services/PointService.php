@@ -55,6 +55,7 @@ class PointService
         return PointTransaction::create([
             'user_id'            => $child->id,
             'task_completion_id' => null,
+            'reward_id'          => $reward->id,
             'points'             => $reward->points_required,
             'type'               => 'redeemed',
             'description'        => 'Resgatou: ' . $reward->title,

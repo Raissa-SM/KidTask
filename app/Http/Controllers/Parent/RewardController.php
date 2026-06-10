@@ -14,7 +14,7 @@ use Illuminate\View\View;
 class RewardController extends Controller
 {
     /**
-     * Lista as recompensas da família + histórico de resgates.
+     * Lista as recompensas da família + resgates pendentes de entrega + histórico.
      */
     public function index(): View
     {
@@ -26,15 +26,22 @@ class RewardController extends Controller
             ->orderBy('points_required')
             ->get();
 
-        // Histórico de todos os resgates dos filhos desta família
-        $redemptions = PointTransaction::where('type', 'redeemed')
+        $baseQuery = PointTransaction::where('type', 'redeemed')
             ->whereHas('user', fn ($q) => $q->where('family_id', $familyId))
-            ->with('user')
-            ->orderBy('created_at', 'desc')
-            ->limit(50)
+            ->with(['user', 'reward']);
+
+        $pendingRedemptions = (clone $baseQuery)
+            ->whereNull('delivered_at')
+            ->orderBy('created_at', 'asc')
             ->get();
 
-        return view('parent.rewards.index', compact('rewards', 'redemptions'));
+        $deliveredRedemptions = (clone $baseQuery)
+            ->whereNotNull('delivered_at')
+            ->orderBy('delivered_at', 'desc')
+            ->limit(30)
+            ->get();
+
+        return view('parent.rewards.index', compact('rewards', 'pendingRedemptions', 'deliveredRedemptions'));
     }
 
     public function create(): View
@@ -86,5 +93,28 @@ class RewardController extends Controller
         return redirect()
             ->route('parent.rewards.index')
             ->with('success', 'Recompensa removida.');
+    }
+
+    /**
+     * Marca um resgate como entregue ao filho.
+     */
+    public function deliver(PointTransaction $transaction): RedirectResponse
+    {
+        // Garante que o resgate pertence à família do pai logado
+        if ($transaction->user->family_id !== auth()->user()->family_id) {
+            abort(403);
+        }
+
+        if ($transaction->isDelivered()) {
+            return redirect()
+                ->route('parent.rewards.index')
+                ->with('info', 'Este resgate já foi marcado como entregue.');
+        }
+
+        $transaction->update(['delivered_at' => now()]);
+
+        return redirect()
+            ->route('parent.rewards.index')
+            ->with('success', "Recompensa entregue para {$transaction->user->name}! ✅");
     }
 }

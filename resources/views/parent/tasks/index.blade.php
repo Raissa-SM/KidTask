@@ -12,13 +12,6 @@
         </a>
     </div>
 
-    {{-- Mensagens flash --}}
-    @if(session('success'))
-        <div class="mb-4 px-4 py-3 bg-green-50 border border-green-200 text-green-700 rounded-lg text-sm">
-            {{ session('success') }}
-        </div>
-    @endif
-
     {{-- Filtros --}}
     <form method="GET" action="{{ route('parent.tasks.index') }}"
           class="bg-white border border-gray-200 rounded-xl p-4 mb-6 flex flex-wrap gap-3 items-end">

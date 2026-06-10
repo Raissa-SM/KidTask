@@ -20,3 +20,10 @@
         <span>{{ session('warning') }}</span>
     </div>
 @endif
+
+@if(session('info'))
+    <div class="mb-4 flex items-start gap-3 px-4 py-3 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg text-sm">
+        <span class="mt-0.5">ℹ️</span>
+        <span>{{ session('info') }}</span>
+    </div>
+@endif

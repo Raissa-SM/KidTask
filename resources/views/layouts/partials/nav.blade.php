@@ -28,6 +28,17 @@
                 <a href="{{ route('parent.rewards.index') }}"
                    class="{{ request()->routeIs('parent.rewards.*') ? 'text-indigo-600 font-medium' : 'text-gray-500 hover:text-indigo-600' }}">
                     Recompensas
+                    @php
+                        $pendingRewardsCount = \App\Models\PointTransaction::where('type', 'redeemed')
+                            ->whereNull('delivered_at')
+                            ->whereHas('user', fn($q) => $q->where('family_id', auth()->user()->family_id))
+                            ->count();
+                    @endphp
+                    @if($pendingRewardsCount > 0)
+                        <span class="ml-1 bg-orange-500 text-white text-xs rounded-full px-1.5 py-0.5">
+                            {{ $pendingRewardsCount }}
+                        </span>
+                    @endif
                 </a>
 
                 <a href="{{ route('parent.validations.index') }}"

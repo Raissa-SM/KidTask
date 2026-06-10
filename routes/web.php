@@ -51,6 +51,8 @@ Route::middleware(['auth', 'parent', 'family'])
 
         // CRUD de recompensas — Fase 6
         Route::resource('rewards', ParentRewardController::class)->except(['show']);
+        Route::post('/rewards/redemptions/{transaction}/deliver', [ParentRewardController::class, 'deliver'])
+            ->name('rewards.redemptions.deliver');
     });
 
 // ── Área da criança ───────────────────────────────────────────────────────────

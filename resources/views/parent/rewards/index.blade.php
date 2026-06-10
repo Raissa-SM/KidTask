@@ -58,29 +58,76 @@
         <p class="text-xs text-gray-400 -mt-8 mb-10 text-right">{{ $rewards->count() }} recompensa(s)</p>
     @endif
 
-    {{-- ── Histórico de resgates ──────────────────────────────────────────── --}}
-    <h2 class="text-base font-semibold text-gray-700 mb-3">Histórico de resgates</h2>
+    {{-- ── Resgates pendentes de entrega ─────────────────────────────────────── --}}
+    <h2 class="text-base font-semibold text-gray-700 mb-3">
+        Aguardando entrega
+        @if($pendingRedemptions->isNotEmpty())
+            <span class="text-gray-400 font-normal">({{ $pendingRedemptions->count() }})</span>
+        @endif
+    </h2>
 
-    @if($redemptions->isEmpty())
+    @if($pendingRedemptions->isEmpty())
+        <div class="bg-white border border-gray-200 rounded-xl px-5 py-8 text-center text-gray-400 mb-8">
+            <p class="text-3xl mb-2">✅</p>
+            <p class="font-medium">Nenhum resgate aguardando entrega.</p>
+        </div>
+    @else
+        <div class="space-y-3 mb-8">
+            @foreach($pendingRedemptions as $redemption)
+                <div class="bg-white border border-orange-200 rounded-xl p-5 flex items-center justify-between gap-4">
+
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🎁</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">{{ $redemption->description }}</p>
+                            <p class="text-sm text-gray-500 mt-0.5">
+                                👤 {{ $redemption->user->name }}
+                                &nbsp;·&nbsp;
+                                🕐 {{ $redemption->created_at->format('d/m/Y \à\s H:i') }}
+                                &nbsp;·&nbsp;
+                                <span class="font-medium text-red-500">−{{ $redemption->points }} pts</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <form method="POST"
+                          action="{{ route('parent.rewards.redemptions.deliver', $redemption) }}"
+                          onsubmit="return confirm('Confirmar entrega de \'{{ addslashes($redemption->description) }}\' para {{ $redemption->user->name }}?')">
+                        @csrf
+                        <button type="submit"
+                                class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition shrink-0">
+                            Entreguei ✓
+                        </button>
+                    </form>
+
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    {{-- ── Histórico de entregas ─────────────────────────────────────────────── --}}
+    <h2 class="text-base font-semibold text-gray-700 mb-3">Histórico de entregas</h2>
+
+    @if($deliveredRedemptions->isEmpty())
         <div class="text-center py-8 text-gray-400 text-sm bg-white border border-gray-200 rounded-xl">
-            Nenhum resgate realizado ainda.
+            Nenhum resgate entregue ainda.
         </div>
     @else
         <div class="space-y-2">
-            @foreach($redemptions as $redemption)
+            @foreach($deliveredRedemptions as $redemption)
                 <div class="bg-white border border-gray-200 rounded-xl px-5 py-3 flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <span class="text-xl">🎁</span>
+                        <span class="text-xl">✅</span>
                         <div>
                             <p class="text-sm font-medium text-gray-800">{{ $redemption->description }}</p>
                             <p class="text-xs text-gray-400">
                                 {{ $redemption->user->name }}
                                 &nbsp;·&nbsp;
-                                {{ $redemption->created_at->format('d/m/Y \à\s H:i') }}
+                                Entregue em {{ $redemption->delivered_at->format('d/m/Y H:i') }}
                             </p>
                         </div>
                     </div>
-                    <span class="text-sm font-bold text-red-500 shrink-0">
+                    <span class="text-sm font-bold text-red-400 shrink-0">
                         −{{ $redemption->points }} pts
                     </span>
                 </div>
