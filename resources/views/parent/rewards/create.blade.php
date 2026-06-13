@@ -5,7 +5,7 @@
 
     <x-page-header title="Nova Recompensa" back-route="parent.rewards.index" />
 
-    <div class="max-w-lg bg-white border border-gray-200 rounded-2xl p-6">
+    <div class="max-w-lg bg-white border border-gray-200 rounded-2xl p-4 sm:p-6">
         <form id="form-reward" method="POST" action="{{ route('parent.rewards.store') }}">
             @csrf
 
@@ -34,7 +34,7 @@
                 </label>
                 <input type="number" id="points_required" name="points_required"
                        value="{{ old('points_required', 50) }}" min="1" max="9999" required
-                       class="w-36 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('points_required') border-red-400 @enderror">
+                       class="w-full sm:w-36 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('points_required') border-red-400 @enderror">
                 @error('points_required') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 

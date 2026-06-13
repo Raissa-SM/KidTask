@@ -6,10 +6,10 @@
 --}}
 @props(['title', 'actionLabel' => null, 'actionRoute' => null, 'backRoute' => null, 'backLabel' => '← Voltar'])
 
-<div class="flex items-center justify-between mb-6">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
     <div class="flex items-center gap-3">
         @if($backRoute)
-            <a href="{{ route($backRoute) }}" class="text-gray-400 hover:text-gray-600 text-sm">
+            <a href="{{ route($backRoute) }}" class="text-gray-400 hover:text-gray-600 text-sm shrink-0">
                 {{ $backLabel }}
             </a>
         @endif
@@ -18,7 +18,7 @@
 
     @if($actionLabel && $actionRoute)
         <a href="{{ route($actionRoute) }}"
-           class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
+           class="self-start sm:self-auto bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition">
             {{ $actionLabel }}
         </a>
     @endif

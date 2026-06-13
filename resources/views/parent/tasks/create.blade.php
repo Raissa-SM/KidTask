@@ -4,11 +4,11 @@
 @section('content')
 
 <div class="flex items-center gap-3 mb-6">
-        <a href="{{ route('parent.tasks.index') }}" class="text-gray-400 hover:text-gray-600 text-sm">← Voltar</a>
+        <a href="{{ route('parent.tasks.index') }}" class="text-gray-400 hover:text-gray-600 text-sm shrink-0">← Voltar</a>
         <h1 class="text-2xl font-bold text-gray-800">Nova Tarefa</h1>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded-2xl p-6">
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6">
         <form id="form-task" method="POST" action="{{ route('parent.tasks.store') }}">
             @csrf
 
@@ -40,10 +40,12 @@
                 <label for="points" class="block text-sm font-medium text-gray-700 mb-1">
                     Pontos <span class="text-red-400">*</span>
                 </label>
-                <input type="number" id="points" name="points" value="{{ old('points', 5) }}"
-                       min="1" max="100" required
-                       class="w-32 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('points') border-red-400 @enderror">
-                <span class="text-xs text-gray-400 ml-2">entre 1 e 100</span>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <input type="number" id="points" name="points" value="{{ old('points', 5) }}"
+                           min="1" max="100" required
+                           class="w-28 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('points') border-red-400 @enderror">
+                    <span class="text-xs text-gray-400">entre 1 e 100</span>
+                </div>
                 @error('points')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
@@ -106,11 +108,13 @@
                 <label for="recurrence_day_monthly" class="block text-sm font-medium text-gray-700 mb-1">
                     Dia do mês <span class="text-red-400">*</span>
                 </label>
-                <input type="number" id="recurrence_day_monthly" name="recurrence_day"
-                       value="{{ old('recurrence') === 'monthly' ? old('recurrence_day') : '' }}"
-                       min="1" max="28" placeholder="Ex: 5"
-                       class="w-32 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('recurrence_day') border-red-400 @enderror">
-                <span class="text-xs text-gray-400 ml-2">entre 1 e 28</span>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <input type="number" id="recurrence_day_monthly" name="recurrence_day"
+                           value="{{ old('recurrence') === 'monthly' ? old('recurrence_day') : '' }}"
+                           min="1" max="28" placeholder="Ex: 5"
+                           class="w-28 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('recurrence_day') border-red-400 @enderror">
+                    <span class="text-xs text-gray-400">entre 1 e 28</span>
+                </div>
             </div>
 
             {{-- Lembrete --}}
@@ -120,7 +124,7 @@
                 </label>
                 <input type="time" id="reminder_time" name="reminder_time"
                        value="{{ old('reminder_time') }}"
-                       class="w-40 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                       class="w-full sm:w-40 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 @error('reminder_time')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror

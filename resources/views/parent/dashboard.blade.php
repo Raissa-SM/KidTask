@@ -3,18 +3,17 @@
 
 @section('content')
 
-<div class="flex items-center justify-between mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">Painel do Responsável</h1>
-            <p class="text-gray-500 text-sm mt-1">
-                Família: <strong>{{ auth()->user()->family->name }}</strong>
-                &nbsp;·&nbsp;
-                Código de convite:
+<div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Painel do Responsável</h1>
+        <p class="text-gray-500 text-sm mt-1 flex flex-wrap items-center gap-x-1 gap-y-0.5">
+            <span>Família: <strong>{{ auth()->user()->family->name }}</strong></span>
+            <span class="text-gray-300">·</span>
+            <span>Código:
                 <code class="bg-gray-100 px-2 py-0.5 rounded text-indigo-600 font-mono text-xs">
                     {{ auth()->user()->family->invite_code }}
                 </code>
-            </p>
-        </div>
+            </span>
+        </p>
     </div>
 
     {{-- Resumo: cards de ação rápida --}}
@@ -67,8 +66,8 @@
         <h2 class="text-base font-semibold text-gray-700 mb-3">Conclusões pendentes</h2>
         <div class="space-y-2">
             @foreach($pending->take(3) as $completion)
-                <div class="bg-yellow-50 border border-yellow-200 rounded-xl px-5 py-3 flex items-center justify-between">
-                    <div>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl px-5 py-3 flex items-start justify-between gap-3">
+                    <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-800">{{ $completion->task->title }}</p>
                         <p class="text-xs text-gray-500">
                             {{ $completion->user->name }}
@@ -77,7 +76,7 @@
                         </p>
                     </div>
                     <a href="{{ route('parent.validations.index') }}"
-                       class="text-xs text-indigo-600 hover:underline font-medium">
+                       class="text-xs text-indigo-600 hover:underline font-medium shrink-0">
                         Validar →
                     </a>
                 </div>

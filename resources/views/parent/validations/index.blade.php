@@ -25,15 +25,13 @@
 
                     {{-- Cabeçalho da conclusão --}}
                     <div class="flex items-start justify-between gap-4 mb-4">
-                        <div>
+                        <div class="flex-1 min-w-0">
                             <p class="font-semibold text-gray-800">{{ $completion->task->title }}</p>
-                            <p class="text-sm text-gray-500 mt-0.5">
-                                👤 {{ $completion->user->name }}
-                                &nbsp;·&nbsp;
-                                🕐 {{ $completion->completed_at->format('d/m/Y \à\s H:i') }}
-                                &nbsp;·&nbsp;
-                                ⭐ {{ $completion->task->points }} pts
-                            </p>
+                            <div class="flex flex-wrap gap-x-2 gap-y-0.5 items-center text-sm text-gray-500 mt-0.5">
+                                <span>👤 {{ $completion->user->name }}</span>
+                                <span>🕐 {{ $completion->completed_at->format('d/m/Y H:i') }}</span>
+                                <span>⭐ {{ $completion->task->points }} pts</span>
+                            </div>
                         </div>
                         <span class="text-xs bg-yellow-100 text-yellow-700 font-medium px-2 py-1 rounded-full shrink-0">
                             Pendente

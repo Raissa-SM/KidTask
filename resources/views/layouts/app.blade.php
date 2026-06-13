@@ -11,7 +11,7 @@
 
     @include('layouts.partials.nav')
 
-    <main class="max-w-5xl mx-auto px-6 py-8">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
         @include('layouts.partials.alerts')
         @yield('content')
     </main>

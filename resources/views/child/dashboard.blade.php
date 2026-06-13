@@ -35,7 +35,7 @@
                     $isRejected = $todayCompletion?->isRejected() ?? false;
                 @endphp
 
-                <div class="bg-white border rounded-xl px-5 py-4 flex items-center gap-4
+                <div class="bg-white border rounded-xl px-4 sm:px-5 py-4 flex items-start gap-3 sm:gap-4
                             {{ $isApproved ? 'border-green-200 bg-green-50' : ($isRejected ? 'border-red-200 bg-red-50' : ($isPending ? 'border-yellow-200 bg-yellow-50' : 'border-gray-200')) }}">
 
                     {{-- Ícone de status --}}
@@ -84,7 +84,7 @@
                             <form method="POST" action="{{ route('child.tasks.complete', $task) }}">
                                 @csrf
                                 <button type="submit"
-                                        class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
+                                        class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium px-4 py-2.5 rounded-lg transition">
                                     Fiz! ✓
                                 </button>
                             </form>
@@ -93,7 +93,7 @@
                             <form method="POST" action="{{ route('child.tasks.complete', $task) }}">
                                 @csrf
                                 <button type="submit"
-                                        class="bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium px-4 py-2 rounded-lg transition">
+                                        class="bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium px-4 py-2.5 rounded-lg transition">
                                     Tentar de novo
                                 </button>
                             </form>
