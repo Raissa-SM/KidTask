@@ -1,59 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# KidTask
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de afazeres familiares gamificado. Pais cadastram tarefas, filhos concluem, pais validam e pontos são creditados. Filhos trocam pontos por recompensas criadas pelos pais.
 
-## About Laravel
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- MySQL 8+
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalação
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/seu-usuario/kidtask.git
+   cd kidtask
+   ```
 
-## Learning Laravel
+2. **Instale as dependências e configure o ambiente em um único comando:**
+   ```bash
+   composer run setup
+   ```
+   Isso instala dependências PHP e Node, copia o `.env`, gera a chave da aplicação, roda as migrations e compila os assets.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+   > **Ou passo a passo:**
+   > ```bash
+   > composer install
+   > cp .env.example .env
+   > php artisan key:generate
+   > npm install
+   > npm run build
+   > ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Configure o banco de dados no `.env`:**
+   ```env
+   DB_DATABASE=kidtask
+   DB_USERNAME=seu_usuario
+   DB_PASSWORD=sua_senha
+   ```
 
-## Laravel Sponsors
+4. **Rode as migrations com dados de exemplo:**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   composer run dev
+   ```
+   Isso inicia simultaneamente: servidor Laravel, worker de filas, visualizador de logs e Vite.
 
-### Premium Partners
+   Acesse em: `http://localhost:8000`
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Acesso de demonstração
 
-## Contributing
+Após rodar `php artisan migrate --seed`, use as credenciais abaixo:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Perfil | E-mail | Senha |
+|---|---|---|
+| Pai | pai@kidtask.com | password |
+| Filho | filho@kidtask.com | password |
 
-## Code of Conduct
+## Funcionalidades
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Famílias** — pai cria família e gera código de convite; filhos entram com o código
+- **Tarefas** — CRUD completo com recorrência (diária / semanal / mensal / evento único), atribuição a filhos e filtros
+- **Conclusões** — filho marca tarefa como feita; pai aprova ou rejeita com justificativa
+- **Pontos** — crédito automático ao aprovar; saldo calculado por `ganho − resgatado`; histórico auditável
+- **Recompensas** — CRUD de recompensas com custo em pontos; filho resgata; pai marca como entregue
 
-## Security Vulnerabilities
+## Tecnologias
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **Backend:** Laravel 12, PHP 8.2
+- **Frontend:** Blade, Tailwind CSS 3, Alpine.js
+- **Banco:** MySQL (sessão, cache e filas também no banco)
+- **Build:** Vite 7
 
-## License
+## Comandos úteis
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+composer run test          # roda a suíte de testes
+php artisan migrate:fresh --seed  # recria o banco com dados de exemplo
+./vendor/bin/pint          # formata o código PHP
+php artisan route:list     # lista todas as rotas
+```
